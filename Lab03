@@ -1,1 +1,20 @@
-I chose these 3 stories because they seem the most important to get done early on as without being able to 
+Sprint 1 planning
+
+1. User authenication 
+difficulty estimate- 5 
+priority- hight
+summary- Add the secure user registration making sure login works and password are secure
+
+2. Password reseting
+difficulty estimate- 2 
+Priority- mild 
+Summary- Implement a way for user to reset their password by having a reset password prompt and a message getting sent ot either their email or phone number.
+
+3.In App bug reporting
+difficulty estimate- 2
+Priority- low
+Summary- Implement a button that allows users to report bugs and have the reports sent to an inbox for the developers to look at.
+
+
+justification 
+These stories were chosen so that we can test logins early on and password resets as welll, and with the bug reporting we can have beta testers lets us know whats going on if their are any issues early on. 
