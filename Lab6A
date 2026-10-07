@@ -1,0 +1,26 @@
+ADR 001 choosing app code structure
+status Accepted 
+Date Oct. 5, 2026
+Deciders Software dev team
+
+What we are trying to solve
+  We are designing an app that has calendar features, task scheduling, UI layout and cloud synching
+
+What matters most
+  easy to test: We want the testing to be easy so we don't have waste too much time checking features like sync
+  easy to fix: When bugs apear we want to be able to fix get rid of them easily
+
+Options we looked at
+  MVC / MVVM Pattern (Layered Approach): Separates the app into three distinct parts: the screen layout (View), the background logic (Controller/ViewModel), and the saved data (Model).
+  All-in-One Code (Monolith): Putting screen design, database connections, and sync logic all in the same files.
+
+The decision
+  We decided to use MVC/MVVM
+  why?: we didn't want to go with all in one becasue we felt that mixing everything together could cause issues and make testing more difficult
+
+The Good and Bad
+  Good
+    Independent Work: Designers can work on the screens while programmers work on background features like syncing.
+    Simple Testing: We can run quick tests on the background logic without loading up the full UI.
+  Bad
+    Extra Setup: Requires a bit extra code and planning at the start instead of jumping straight into coding.  
