@@ -1,0 +1,11 @@
+1.Fast & Smooth Performance
+  Architectural Decision: Local-First Storage & Background Syncing
+  Explanation: The app saves data directly to the phone first and syncs with the cloud in the background. This keeps the screens running fast and lag-free, even on slow internet connections.
+
+2. Easy to Test & Maintain
+  Architectural Decision: Separation of UI and Business Logic (MVVM)
+  Explanation: Separating screen design from background code lets us test features like the calendar and sync automatically without needing to open the app UI. It also makes fixing bugs much safer since changing the design won't break the underlying logic.
+
+3. Offline Availability
+  Architectural Decision: Isolated Sync Engine
+  Explanation: A dedicated sync service lets the app work fully offline by saving changes locally. Once the phone reconnects to the internet, the sync engine automatically updates the cloud without losing any user data.
