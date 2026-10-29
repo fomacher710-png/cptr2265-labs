@@ -92,3 +92,35 @@ def test_weighted_average_errors():
     # Missing scores for a weighted category
     with pytest.raises(ValueError):
         weighted_average({"labs": []}, {"labs": 1.0})
+
+def class_statistics(percentages):
+    """Return mean, median, minimum, and maximum for a list of percentage scores.
+
+    Raises ValueError if percentages is empty or contains invalid scores.
+    """
+    if not percentages:
+        raise ValueError("percentages must not be empty")
+    
+    for s in percentages:
+        _check_score(s)
+        
+    sorted_scores = sorted(percentages)
+    n = len(sorted_scores)
+    
+    mean = sum(percentages) / n
+    minimum = sorted_scores[0]
+    maximum = sorted_scores[-1]
+    
+    if n % 2 == 1:
+        median = float(sorted_scores[n // 2])
+    else:
+        mid1 = sorted_scores[(n // 2) - 1]
+        mid2 = sorted_scores[n // 2]
+        median = (mid1 + mid2) / 2.0
+        
+    return {
+        "mean": round(mean, 2),
+        "median": median,
+        "minimum": minimum,
+        "maximum": maximum
+    }
