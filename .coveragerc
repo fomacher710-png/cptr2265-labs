@@ -1,0 +1,3 @@
+[run]
+omit =
+    gradebook/__main__.py

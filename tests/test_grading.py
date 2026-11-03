@@ -7,7 +7,9 @@ Run from lab09/starter:
 """
 
 import pytest
+import unittest.mock as u
 
+from unittest.mock import patch
 from gradebook.grading import letter_grade, weighted_average
 from gradebook.grading import grade_points, drop_lowest
 
@@ -93,6 +95,8 @@ def test_weighted_average_errors():
     with pytest.raises(ValueError):
         weighted_average({"labs": []}, {"labs": 1.0})
 
+
+
 def class_statistics(percentages):
     """Return mean, median, minimum, and maximum for a list of percentage scores.
 
@@ -124,3 +128,30 @@ def class_statistics(percentages):
         "minimum": minimum,
         "maximum": maximum
     }
+
+#mock test
+class GradebookRepository:
+    """Simulates an external database dependency for fetching student records."""
+    def fetch_student_grades(self, student_id: int) -> dict:
+        raise NotImplementedError("Real database connection not implemented")
+
+
+@patch(f"{__name__}.GradebookRepository")
+def test_gradebook_repository_mock(mock_repo_class):
+    """Test that our grading workflow interacts with an external database/repository
+    using a mock, ensuring zero actual network or database I/O occurs.
+    """
+    # 1. Arrange: Configure the mock return values
+    mock_instance = mock_repo_class.return_value
+    mock_instance.fetch_student_grades.return_value = {"math": 92, "history": 88}
+    
+    # 2. Act: Call code interacting with the repository
+    repo = mock_repo_class()
+    grades = repo.fetch_student_grades(101)
+    
+    # 3. Assert: Verify the behavior and interactions without touching real storage
+    mock_repo_class.assert_called_once()
+    mock_instance.fetch_student_grades.assert_called_once_with(101)
+    assert grades["math"] == 92
+    assert grades["history"] == 88
+
