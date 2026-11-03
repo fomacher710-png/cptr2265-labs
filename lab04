@@ -1,0 +1,154 @@
+Part A
+The system is a cross-platform task manager and calendar. The application is beign dessigned to allow users to crete task and schedule time and date for the task to be completed on.
+The aplication's purpose is to help user better manage task and dates so that task can be done on time.
+FUNCTIONAL
+1.Task Creation: The system shall allow users to type and input custom text descriptions to create new to-do tasks.
+2.Task Completion: The system shall provide a checkbox UI element for each task that users can toggle to mark the task as completed or incomplete.
+3.Calendar View & Assignment: The system shall display an integrated calendar view allowing users to assign tasks to specific dates throughout the month.
+4.Tagging & Categorization: The system shall allow users to create and assign custom tags or labels to organize and group tasks by category.
+5.Recurring Tasks: The system shall support recurring task configurations (e.g., daily, weekly, monthly) that automatically regenerate tasks based on the specified repeat schedule.
+6.Task Search: The system shall include a search feature that allows users to filter and locate tasks by matching keywords in task descriptions or tags.
+7.User Authentication: The system shall require users to log in with an account to securely store and associate their task data in the cloud.
+8.Cross-Device Data Sync: The system shall synchronize user task data across multiple client platforms (e.g., mobile phones, web, or desktop browsers).
+9.Offline Data Persistence: The system shall permit users to view, create, and update tasks while disconnected from the internet, storing changes locally until a connection is re-established.
+10.Task Deletion & Editing: The system shall allow users to edit existing task details or delete tasks from their list.
+11.Theme Selection: The system shall allow users to customize the user interface theme (e.g., light mode, dark mode) and adjust font settings.
+12.Automatic Conflict Resolution: The system shall detect and resolve data conflicts during synchronization when offline changes are merged with server data upon reconnecting.
+NON-FUNCTIONAL
+1.(Performance)Load Times: The application shall load and display the user’s primary task list within 2 seconds of launch under standard network conditions.
+2.(Usability)Accessibility & Visual Customization: The system interface shall support adjustable themes (including high-contrast/dark modes) and scalable font sizes to accommodate user preferences and visual accessibility needs.
+3.(Reliability)Offline Reliability: The local data storage system shall maintain 100% data integrity while operating offline, ensuring zero data loss during network disruptions.
+
+Part B
+Use Case 1: Create a Recurring Task with Tag
+Use Case Name: Create Recurring Task with Tag
+
+Actors: Registered User
+
+Preconditions:
+
+User is authenticated and logged into the application.
+
+Application is running and displaying the main task management interface.
+
+Main Flow:
+
+User clicks or taps the "Add Task" button/input field.
+
+User types in the task description.
+
+User selects a date from the calendar view to assign to the task.
+
+User assigns one or more custom tags/categories to the task.
+
+User selects the "Repeat" option and sets the recurrence frequency (e.g., daily, weekly, monthly).
+
+User saves the task.
+
+The system creates the task, schedules the recurrence schedule, and displays it on the user's task list and calendar view.
+
+Alternate Flows:
+
+A1: Mandatory Field Missing (No Task Description)
+
+In Step 6, if the user attempts to save without entering a task description, the system displays an error prompt ("Task description cannot be empty").
+
+User enters a description and saves again.
+
+The flow resumes at Step 7.
+
+A2: Offline Creation
+
+In Step 6, if the device is offline, the system saves the new task locally to local storage and updates the local UI immediately.
+
+The system queues the sync event to upload to the server once network connectivity is restored.
+
+Postconditions:
+
+The task is successfully stored (locally and/or in the cloud) and visible in both the list view and calendar view on the chosen date.
+
+Use Case 2: Search and Filter Tasks by Keyword/Tag
+Use Case Name: Search and Filter Tasks
+
+Actors: Registered User
+
+Preconditions:
+
+User is logged into the application.
+
+One or more tasks exist in the user's account.
+
+Main Flow:
+
+User navigates to or clicks on the search bar in the top navigation area.
+
+User types a keyword, phrase, or tag name into the search bar.
+
+As the user types, the system dynamically filters the active task list to display only tasks matching the search criteria in their title, description, or assigned tags.
+
+User selects or reviews the matching task results.
+
+Alternate Flows:
+
+A1: No Matching Results Found
+
+In Step 3, if no tasks match the entered keyword or tag, the system displays a "No matching tasks found" message.
+
+User clears or modifies the search query.
+
+System restores the default task list view.
+
+A2: Search Cleared
+
+User clicks the "Clear Search" icon or deletes all text from the search bar.
+
+System resets the display to show all tasks for the selected date or category.
+
+Postconditions:
+
+The user views the filtered subset of tasks corresponding to the search term without altering any stored task data.
+
+Use Case 3: Synchronize Local Offline Changes with Cloud
+Use Case Name: Synchronize Offline Changes with Cloud Database
+
+Actors: Registered User, Sync Service (System Actor)
+
+Preconditions:
+
+User has performed offline actions (e.g., created, updated, completed, or deleted tasks) while disconnected.
+
+The device transitions from offline to online status (network connectivity restored).
+
+Main Flow:
+
+The Sync Service detects an active internet connection.
+
+The Sync Service reads all pending locally cached changes/events.
+
+The system transmits the pending local updates to the central cloud database.
+
+The server merges the updates and returns confirmation along with any new remote updates.
+
+The application updates local storage and refreshes the UI to reflect the synchronized state.
+
+Alternate Flows:
+
+A1: Synchronization Conflict Detected
+
+In Step 4, the server detects that a task modified locally was also modified on another device prior to reconnecting.
+
+The system executes automatic conflict resolution rules (e.g., merging non-conflicting fields or retaining the latest timestamp).
+
+The updated resolved state is saved locally and on the server.
+
+A2: Network Drops During Sync
+
+In Step 3 or 4, if the network connection fails before sync completion, the system halts the sync operation.
+
+The system retains the pending changes in local storage.
+
+The system waits until connection is re-established to restart the process at Step 1.
+
+Postconditions:
+
+Local and cloud databases are fully synchronized and contain identical task state information across all user devices.

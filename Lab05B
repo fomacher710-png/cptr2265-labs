@@ -1,0 +1,53 @@
+Code snippet
+classDiagram
+    class User 
+        -String userId
+        -String email
+        -String passwordHash
+        +login() Boolean
+        +logout() Void
+    
+
+    class Preferences 
+        -String theme
+        -String fontFamily
+        -Boolean offlineSyncEnabled
+        +updateTheme(newTheme: String) Void
+        +applySettings() Void
+    
+
+    class Task 
+        #String taskId
+        #String title
+        #Boolean isCompleted
+        #Date dueDate
+        +markAsComplete() Void
+        +editTask(newTitle: String) Void
+    
+
+    class RecurringTask 
+        -String repeatInterval
+        -Date endDate
+        +calculateNextDueDate() Date
+        +updateInterval(interval: String) Void
+    
+
+    class Tag 
+        -String tagId
+        -String name
+        -String colorHex
+        +assignToTask(taskId: String) Void
+        +getAssociatedTasks() List
+    
+
+    %% Composition: User strictly owns Preferences (lifetime bound)
+    User "1" *-- "1" Preferences : contains
+
+    %% Aggregation: User has Tasks (Tasks can exist independently or be transferred)
+    User "1" o-- "0..*" Task : owns
+
+    %% Inheritance: RecurringTask inherits from Task
+    Task <|-- RecurringTask
+
+    %% Association: Task is associated with Tags (many-to-many relationship)
+    Task "0..*" -- "0..*" Tag : tagged with
