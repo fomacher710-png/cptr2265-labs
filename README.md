@@ -3,5 +3,4 @@ my goal for this course is to understand software engineering as a whole and lea
 
 After reading Sommerville Chapter 1, I think one of the most challenging aspects of software engineering will be having have to work with limitations. Like when designing a software you always have to be aware of the limitations you are constrained to and have to deal with throughout the design process otherwise your software will not work.
 
-
-![Gradebook CI](https://github.com/fomacher710/cptr2265-labs/actions/workflows/ci.yml/badge.svg)
+[![Gradebook CI](https://github.com/fomacher710/cptr2265-labs/actions/workflows/ci.yml/badge.svg)](https://github.com/fomacher710/cptr2265-labs/actions/workflows/ci.yml)
