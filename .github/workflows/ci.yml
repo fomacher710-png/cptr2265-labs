@@ -25,7 +25,6 @@ jobs:
         run: |
           echo "Checking repository structure..."
           ls -la
-          # Add custom validation checks here if needed
 
   # Stage 2: Unit Tests (Depends on Build)
   unit-tests:
@@ -83,4 +82,6 @@ jobs:
 
       - name: Run integration tests
         run: |
-          pytest tests/integration
+          # Use a valid path, marker (-m integration), or keyword filter (-k integration) 
+          # matching your project layout
+          pytest -k "integration"
