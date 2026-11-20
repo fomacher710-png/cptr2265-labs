@@ -1,0 +1,38 @@
+# Lab 12 Part C: build and push your Docker image from your CI/CD pipeline.
+#
+# GitHub only runs workflows stored in .github/workflows/ at the ROOT of your
+# repository, so this file does nothing where it is. Copy the job below into
+# the `jobs:` section of the ci.yml you built in Lab 11 (keep the 2-space
+# indentation), set `needs:` to your job names, and replace your Lab 11 deploy
+# job if it overlaps.
+#
+# Requirements:
+#   * runs only on pushes/merges to main
+#   * runs only after your test jobs pass
+#   * tags the image with the Git commit SHA (github.sha) for traceability
+#   * pushes to GitHub Container Registry: ghcr.io/<owner>/<image-name>
+#     (image names on ghcr.io must be all lowercase)
+#   * logs in with the built-in GITHUB_TOKEN; no personal token needed
+
+  docker-image:
+    # TODO needs: [your unit test job, your integration test job]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write          # lets GITHUB_TOKEN push to ghcr.io
+    steps:
+      - uses: actions/checkout@v4
+
+      # TODO Log in to ghcr.io with docker/login-action@v3
+      #      registry: ghcr.io
+      #      username: ${{ github.actor }}
+      #      password: ${{ secrets.GITHUB_TOKEN }}
+
+      # TODO Build and push with docker/build-push-action@v6
+      #      context: the folder that contains your Dockerfile (e.g. . or lab12/myapp)
+      #      push: true
+      #      tags: ghcr.io/<owner>/<image-name>:${{ github.sha }}   (required)
+      #            optionally also :latest
+      #      Hint: if your GitHub username has capital letters, write the
+      #      owner part in lowercase yourself.

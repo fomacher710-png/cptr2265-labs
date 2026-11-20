@@ -1,0 +1,14 @@
+# Lab 12 Part A: everything that should NOT be sent to the Docker build
+# context or copied into the image. One pattern per line, like .gitignore.
+#
+# TODO Think about each of these and add the patterns that apply to you:
+#   * secrets: your .env file (critical: it must never end up in an image)
+#   * Git metadata and editor folders (.git/, .vscode/, .idea/)
+#   * Python: virtual environments, __pycache__/, .pytest_cache/, local *.db files
+#   * Java: target/ or build/ (unless your Dockerfile copies a jar you built
+#     outside Docker), .gradle/
+#   * files only needed for development: tests, docs, CI config, the
+#     Dockerfile and docker-compose.yml themselves
+#
+# Check your work: the "transferring context" size shown by `docker build`
+# should drop noticeably once this file is filled in.
