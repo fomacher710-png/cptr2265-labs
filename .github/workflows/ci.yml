@@ -7,81 +7,74 @@ on:
     branches: [ main ]
 
 jobs:
-  # Stage 1: Validate repository structure / lint
-  build:
-    name: Validate Project
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Check out your repository code
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.10"
-
-      - name: Verify project files
-        run: |
-          echo "Checking repository structure..."
-          ls -la
-
-  # Stage 2: Unit Tests (Depends on Build)
-  unit-tests:
-    name: Unit Tests
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
+      # 2. Set up Python environment
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.10"
           cache: "pip"
 
+      # 3. Install dependencies
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           pip install pytest pytest-cov
 
-      - name: Run unit tests with coverage
+      # 4. Run tests with coverage reporting
+      - name: Run pytest with coverage
         run: |
           pytest --cov=gradebook --cov-report=term-missing --cov-report=html
 
+      # 5. Upload HTML coverage report as a build artifact
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v4
         with:
-          name: unit-coverage-report
+          name: coverage-report
           path: htmlcov/
 
-  # Stage 3: Integration Tests (Depends on Build)
-  integration-tests:
-    name: Integration Tests
-    needs: build
+  push-to-ghcr:
+    name: Push Docker Image to GHCR
+    needs: build-and-test
+    # Only push to GHCR when code is pushed directly to main (after a merge)
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Log in to the GitHub Container Registry
+        uses: docker/login-action@v3
         with:
-          python-version: "3.10"
-          cache: "pip"
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          pip install pytest
+      - name: Extract metadata (tags, labels)
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=sha,format=long
+            type=raw,value=latest,enable={{is_default_branch}}
 
-      - name: Run integration tests
-        run: |
-          # Use a valid path, marker (-m integration), or keyword filter (-k integration) 
-          # matching your project layout
-          pytest -k "integration"
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
