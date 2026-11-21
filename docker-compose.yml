@@ -1,0 +1,44 @@
+# Lab 12 Part B: run your application together with at least one dependency.
+#
+#     copy .env.example .env        (macOS/Linux: cp .env.example .env)
+#     docker compose up -d --build
+#     docker compose ps
+#     docker compose logs app
+#     docker compose exec app sh    (open a shell inside the running container)
+#     docker compose down           (add -v to also delete the database volume)
+#
+# Rules from the lab: ALL configuration (database URL, port, passwords) comes
+# from environment variables. Use ${VARIABLE} references to values in .env;
+# never type a secret into this file. Your application code must read these
+# settings from the environment (Python: os.environ / os.getenv;
+# Java: System.getenv) instead of hardcoding them.
+
+services:
+  app:
+    # TODO build: build the image from the Dockerfile in this folder
+    # TODO ports: map ${APP_PORT} on your machine to the port your app listens on
+    # TODO environment: pass the settings your app reads, for example:
+    #      DATABASE_URL  - inside the Compose network the database host name is
+    #                      the SERVICE NAME ("db"), not localhost.
+    #                      Python (psycopg/SQLAlchemy): postgresql://USER:PASSWORD@db:5432/DBNAME
+    #                      Java (JDBC):  jdbc:postgresql://db:5432/DBNAME  plus separate
+    #                                    DB_USER / DB_PASSWORD variables
+    #      APP_ENV       - from .env
+    # TODO depends_on: wait until db is HEALTHY, not just started
+    #      (long form with "condition: service_healthy")
+
+  # Choose ONE dependency. PostgreSQL is set up below; if your app needs Redis
+  # instead, replace this service with image: redis:7-alpine and a healthcheck
+  # of ["CMD", "redis-cli", "ping"]. A mock service (e.g. WireMock) also counts.
+  db:
+    image: postgres:17-alpine
+    # TODO environment: POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB from .env
+    # TODO volumes: keep the data in a named volume mounted at /var/lib/postgresql/data
+    healthcheck:
+      # TODO test: use pg_isready to check the database accepts connections.
+      #      Note: write $$VAR to pass a literal $VAR to the container's shell.
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+# TODO volumes: declare the named volume used by db
