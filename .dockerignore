@@ -2,6 +2,21 @@
 # context or copied into the image. One pattern per line, like .gitignore.
 #
 # TODO Think about each of these and add the patterns that apply to you:
+.env
+.git/
+.vscode/
+.idea/
+__pycache__/
+.pytest_cache/
+*.db
+target/
+build/
+.gradle/
+tests/
+docs/
+ci/
+Dockerfile
+docker-compose.yml
 #   * secrets: your .env file (critical: it must never end up in an image)
 #   * Git metadata and editor folders (.git/, .vscode/, .idea/)
 #   * Python: virtual environments, __pycache__/, .pytest_cache/, local *.db files
